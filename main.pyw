@@ -41,9 +41,12 @@ def file_write(file, object):
         return False
 
 def look_for_files():
-    package = None
+    package = "https://raw.githubusercontent.com/zgndia/league-lp-tracker/refs/heads/main/data/essentials.py"
+    filename = "essentials.py"
+    
+    response = requests.get(package)
 
-    defaultrank = "1\n4\n0\n20 25"
+    defaultrank = "1\n4\n0\n20-25"
     items = ["lol.ico", "essentials.py", "rank.txt"]
 
     for item in items:
@@ -52,7 +55,9 @@ def look_for_files():
             if items[0] == item:
                 download_img(file_path, "lol.png", "https://i.postimg.cc/8zdm3x9S/lol.png")
             if items[1] == item:
-                file_write(os.path.join(file_path, "essentials.py"), package)
+                if response.status_code == 200:
+                    file_write(os.path.join(file_path, "essentials.py"), response.text)
+                    print(f"Downloaded successfully as {filename}")
             if items[2] == item:
                 file_write(os.path.join(file_path, "rank.txt"), defaultrank)
 
